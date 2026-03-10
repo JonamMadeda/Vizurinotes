@@ -3,7 +3,8 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { encryptTextServer } from '@/lib/server-encryption';
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, context: { params: Promise<{ id: string }> }) {
+    const { id } = await context.params;
     const cookieStore = await cookies();
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,7 +29,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             title: encNoteTitle,
             last_modified: updatedNote.lastModified
         })
-        .eq('id', params.id)
+        .eq('id', id)
         .eq('user_id', session.user.id);
 
     if (noteError) return NextResponse.json({ error: noteError.message }, { status: 500 });
@@ -41,7 +42,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
             .from('pages')
             .upsert({
                 id: page.id,
-                note_id: params.id,
+                note_id: id,
                 title: encPageTitle,
                 content: encPageContent,
                 date: page.date
@@ -51,7 +52,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const { data: dbPages } = await supabase
         .from('pages')
         .select('id')
-        .eq('note_id', params.id);
+        .eq('note_id', id);
 
     if (dbPages) {
         const localPageIds = new Set(updatedNote.pages.map((p: any) => p.id));
@@ -65,7 +66,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     return NextResponse.json({ success: true });
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+    const { id } = await context.params;
     const cookieStore = await cookies();
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -81,7 +83,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { error } = await supabase.from('notes').delete().eq('id', params.id).eq('user_id', session.user.id);
+    const { error } = await supabase.from('notes').delete().eq('id', id).eq('user_id', session.user.id);
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
