@@ -34,7 +34,7 @@ export default function NoteEditor({
         const now = Date.now();
         const newPage: Page = {
             id: crypto.randomUUID(),
-            title: `Page ${note.pages.length + 1}`,
+            title: "Title",
             content: "",
             date: now,
         };
@@ -65,7 +65,7 @@ export default function NoteEditor({
             <div className="h-14 border-b border-border flex items-center px-4 md:px-8 bg-background/90 backdrop-blur-sm z-10 shrink-0">
                 <button
                     onClick={onBack}
-                    className="md:hidden flex items-center text-slate-600 hover:text-foreground mr-4 p-2 -ml-2 rounded-md hover:bg-slate-100 transition-colors"
+                    className="md:hidden flex items-center text-slate-600 hover:text-foreground mr-4 p-2 -ml-2 hover:bg-slate-100 transition-colors"
                 >
                     <ArrowLeft size={20} />
                     <span className="ml-1 text-sm font-medium">Back</span>
@@ -95,21 +95,23 @@ export default function NoteEditor({
             {/* Scrollable Page Stack */}
             <div className="flex-1 overflow-y-auto px-4 py-8 md:px-[12%] lg:px-[18%]">
                 <div className="flex flex-col gap-6">
-                    {note.pages.map((page, index) => (
-                        <PageCard
-                            key={page.id}
-                            page={page}
-                            pageIndex={index}
-                            totalPages={note.pages.length}
-                            onUpdatePage={(updates) => updatePage(page.id, updates)}
-                            onDeletePage={() => handleDeletePage(page.id)}
-                        />
-                    ))}
+                    {[...note.pages]
+                        .sort((a, b) => b.date - a.date)
+                        .map((page, index) => (
+                            <PageCard
+                                key={page.id}
+                                page={page}
+                                pageIndex={index}
+                                totalPages={note.pages.length}
+                                onUpdatePage={(updates) => updatePage(page.id, updates)}
+                                onDeletePage={() => handleDeletePage(page.id)}
+                            />
+                        ))}
 
                     {/* Add Page Button */}
                     <button
                         onClick={handleAddPage}
-                        className="flex items-center justify-center gap-2 py-4 border-2 border-dashed border-slate-300 rounded-xl text-slate-400 hover:text-accent hover:border-accent hover:bg-accent/5 transition-all group cursor-pointer"
+                        className="flex items-center justify-center gap-2 py-4 border-2 border-dashed border-slate-300 text-slate-400 hover:text-accent hover:border-accent hover:bg-accent/5 transition-all group cursor-pointer"
                     >
                         <Plus size={20} className="group-hover:scale-110 transition-transform" />
                         <span className="text-sm font-medium">Add New Page</span>

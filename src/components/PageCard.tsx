@@ -58,11 +58,11 @@ export default function PageCard({
     }, [page.content, editor]);
 
     return (
-        <div className="group/card bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+        <div className="group/card bg-white border border-slate-200 overflow-hidden">
             {/* Page Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
                 <div className="flex items-center gap-3">
-                    <span className="text-xs font-semibold text-accent bg-accent/10 px-2.5 py-1 rounded-md">
+                    <span className="text-xs font-semibold text-accent bg-accent/10 px-2.5 py-1">
                         {pageIndex + 1}
                     </span>
                     <div className="flex items-center gap-1.5 text-slate-400">
@@ -81,7 +81,7 @@ export default function PageCard({
                 {totalPages > 1 && (
                     <button
                         onClick={onDeletePage}
-                        className="text-slate-300 hover:text-red-500 p-1.5 rounded-md hover:bg-red-50 opacity-0 group-hover/card:opacity-100 transition-all"
+                        className="text-slate-300 hover:text-red-500 p-1.5 hover:bg-red-50 opacity-0 group-hover/card:opacity-100 transition-all"
                         aria-label="Delete page"
                     >
                         <Trash2 size={14} />

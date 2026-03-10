@@ -7,6 +7,7 @@ interface SidebarProps {
     onSelectNote: (id: string) => void;
     onAddNote: () => void;
     onDeleteNote: (id: string, e: React.MouseEvent) => void;
+    onSignOut: () => void;
     isMobileListVisible: boolean;
 }
 
@@ -16,11 +17,12 @@ export default function Sidebar({
     onSelectNote,
     onAddNote,
     onDeleteNote,
+    onSignOut,
     isMobileListVisible,
 }: SidebarProps) {
     return (
         <div
-            className={`flex-col h-full bg-nav-bg text-nav-fg w-full md:w-80 md:flex flex-shrink-0 border-r border-nav-hover transition-all duration-300 ${isMobileListVisible ? "flex" : "hidden md:flex"
+            className={`flex flex-col h-full bg-nav-bg text-nav-fg w-full md:w-80 md:flex flex-shrink-0 border-r border-nav-hover transition-all duration-300 ${isMobileListVisible ? "flex" : "hidden md:flex"
                 }`}
         >
             <div className="p-4 border-b border-nav-hover flex items-center justify-between sticky top-0 bg-nav-bg z-10">
@@ -81,6 +83,15 @@ export default function Sidebar({
                         </div>
                     ))
                 )}
+            </div>
+
+            <div className="p-4 border-t border-nav-hover bg-nav-bg shrink-0">
+                <button
+                    onClick={onSignOut}
+                    className="w-full py-2 text-sm text-slate-400 hover:text-white transition-colors border border-nav-hover hover:border-slate-500 bg-nav-hover/20"
+                >
+                    Sign Out
+                </button>
             </div>
         </div>
     );
